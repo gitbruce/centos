@@ -1,0 +1,21 @@
+###centos7 docker使用https_proxy 代理配置
+
+在centos6版本如果你配置docker 的https_proxy 代理,只需要在/etc/sysconfig/docker 配置文件里面增加配置即可,但在centos7 你会发现已经无法使用这样的配置方式进行https_proxy 配置,因为centos使用systemd 来管理进程环境,我们需要如下配置来应用https_proxy 配置
+
+创建目录
+
+mkdir /etc/systemd/system/docker.service.d
+创建文件
+
+touch /etc/systemd/system/docker.service.d/http-proxy.conf
+配置http-proxy.conf文件增加以下内容
+
+[Service]
+Environment="HTTP_PROXY=http://proxy.ip.com:80"
+daemon重新reload 并重启docker
+
+systemctl daemon-reload
+systemctl restart docker
+检查变量是否加载
+
+systemctl show docker --property Environment
